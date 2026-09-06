@@ -1,0 +1,19 @@
+{
+    "name": "bleze88/new-projet-tchat",
+    "description": "Tchat PHP moderne et securise avec salons multiples, messagerie privee et mises a jour en quasi temps reel via SSE.",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

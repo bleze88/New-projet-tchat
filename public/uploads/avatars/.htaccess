@@ -1,0 +1,12 @@
+# Defense in depth: this directory only ever receives images written by
+# AvatarUpload::store() with a random server-generated filename, but in case
+# anything ever slipped past validation, make sure it can never be executed.
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+<FilesMatch "\.(php|phtml|php[0-9]|phar|cgi|pl)$">
+    Require all denied
+</FilesMatch>
+
+Options -ExecCGI -Indexes

@@ -1,0 +1,4 @@
+# Defense in depth: if a webserver is ever misconfigured to serve this
+# repository root instead of public/, block everything rather than leaking
+# source code, .env, vendor/, etc.
+Require all denied
