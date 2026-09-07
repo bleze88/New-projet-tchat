@@ -63,7 +63,7 @@ use App\Support\View;
                     <details style="margin-top: 0.5rem;">
                         <summary class="link-button" style="font-size: 0.8rem;">Modération</summary>
                         <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 0.5rem;">
-                            <form method="post" action="/admin_users.php">
+                            <form method="post" action="/admin_users.php" class="mod-inline-form">
                                 <?= Csrf::field() ?>
                                 <input type="hidden" name="form" value="apply_timeout">
                                 <input type="hidden" name="user_id" value="<?= (int) $listedUser['id'] ?>">
@@ -81,14 +81,14 @@ use App\Support\View;
                                 <button type="submit" class="btn" style="padding: 0.25rem 0.6rem; font-size: 0.75rem;">Appliquer</button>
                             </form>
 
-                            <form method="post" action="/admin_users.php" onsubmit="return confirm('Bannir cet utilisateur du site ?');">
+                            <form method="post" action="/admin_users.php" class="mod-inline-form" onsubmit="return confirm('Bannir cet utilisateur du site ?');">
                                 <?= Csrf::field() ?>
                                 <input type="hidden" name="form" value="apply_ban">
                                 <input type="hidden" name="user_id" value="<?= (int) $listedUser['id'] ?>">
                                 <div style="font-size: 0.78rem; color: var(--fg-muted); margin-bottom: 0.25rem;">Bannir du site</div>
                                 <select name="ban_duration">
                                     <?php foreach (Moderation::BAN_OPTIONS as $value => $label): ?>
-                                        <option value="<?= View::e($value) ?>"><?= View::e($label) ?></option>
+                                        <option value="<?= View::e((string) $value) ?>"><?= View::e($label) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                                 <input type="text" name="reason" placeholder="raison (optionnel)">
@@ -96,7 +96,7 @@ use App\Support\View;
                             </form>
 
                             <?php if ($ban !== null): ?>
-                                <form method="post" action="/admin_users.php">
+                                <form method="post" action="/admin_users.php" class="mod-inline-form">
                                     <?= Csrf::field() ?>
                                     <input type="hidden" name="form" value="remove_ban">
                                     <input type="hidden" name="user_id" value="<?= (int) $listedUser['id'] ?>">

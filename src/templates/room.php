@@ -102,7 +102,7 @@ foreach ($messages as $m) {
                                             <label>Ban
                                                 <select name="ban_duration">
                                                     <?php foreach (\App\Support\Moderation::BAN_OPTIONS as $value => $label): ?>
-                                                        <option value="<?= View::e($value) ?>"><?= View::e($label) ?></option>
+                                                        <option value="<?= View::e((string) $value) ?>"><?= View::e($label) ?></option>
                                                     <?php endforeach; ?>
                                                 </select>
                                             </label>

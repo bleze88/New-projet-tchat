@@ -396,6 +396,22 @@ a {
     color: var(--fg);
 }
 
+/* Moderation forms on /admin_users.php: without an explicit min-width,
+   a <select> inside a flex row can shrink to just its arrow (unlike a
+   text input), so give each form and its controls a floor width. */
+.mod-inline-form {
+    flex: 1 1 260px;
+    min-width: 240px;
+}
+
+.mod-inline-form select {
+    min-width: 110px;
+}
+
+.mod-inline-form input[type="text"] {
+    min-width: 130px;
+}
+
 .message-bubble img.chat-image {
     max-width: 220px;
     border-radius: 8px;
