@@ -342,6 +342,60 @@ a {
     color: var(--accent);
 }
 
+.mod-menu {
+    display: inline-block;
+    position: relative;
+}
+
+.mod-menu summary {
+    cursor: pointer;
+    list-style: none;
+}
+
+.mod-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.mod-menu-panel {
+    position: absolute;
+    z-index: 20;
+    top: 100%;
+    left: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    width: 220px;
+    text-align: left;
+}
+
+.mod-menu-panel form {
+    margin-bottom: 0.5rem;
+}
+
+.mod-menu-panel form:last-child {
+    margin-bottom: 0;
+}
+
+.mod-menu-panel label {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--fg-muted);
+    margin-bottom: 0.25rem;
+}
+
+.mod-menu-panel select,
+.mod-menu-panel input[type="text"] {
+    width: 100%;
+    font-size: 0.78rem;
+    padding: 0.25rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--fg);
+}
+
 .message-bubble img.chat-image {
     max-width: 220px;
     border-radius: 8px;

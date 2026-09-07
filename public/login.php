@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 require dirname(__DIR__) . '/src/bootstrap.php';
 
+use App\Models\Ban;
 use App\Models\User;
 use App\Support\Auth;
 use App\Support\Csrf;
+use App\Support\Moderation;
 use App\Support\RateLimiter;
 use App\Support\View;
 
@@ -32,12 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $login !== '' ? User::findByUsernameOrEmail($login) : null;
 
         if ($user !== null && password_verify($password, $user['password_hash'])) {
-            Auth::login((int) $user['id']);
-            header('Location: /rooms.php');
-            exit;
-        }
+            $ban = Ban::active((int) $user['id']);
 
-        $error = 'Identifiants incorrects.';
+            if ($ban !== null) {
+                $error = 'Ce compte a été banni ' . Moderation::formatUntil($ban['expires_at'])
+                    . ($ban['reason'] !== null ? '. Raison : ' . $ban['reason'] : '.');
+            } else {
+                Auth::login((int) $user['id']);
+                header('Location: /rooms.php');
+                exit;
+            }
+        } else {
+            $error = 'Identifiants incorrects.';
+        }
     }
 }
 

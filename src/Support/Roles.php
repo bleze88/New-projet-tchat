@@ -26,6 +26,11 @@ final class Roles
         return isset(self::RANK[$role]);
     }
 
+    public static function outranks(string $role, string $other): bool
+    {
+        return (self::RANK[$role] ?? -1) > (self::RANK[$other] ?? PHP_INT_MAX);
+    }
+
     /**
      * @return list<string>
      */

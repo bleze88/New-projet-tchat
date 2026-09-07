@@ -28,7 +28,7 @@ $pageTitle = $pageTitle ?? 'Tchat';
             <a href="/rooms.php">Salons</a>
             <a href="/dm.php">Messages privés</a>
             <a href="/profile.php">Profil</a>
-            <?php if (Roles::atLeast($currentUser['role'], Roles::ADMIN)): ?>
+            <?php if (Roles::atLeast($currentUser['role'], Roles::MODERATOR)): ?>
                 <a href="/admin_users.php">Utilisateurs</a>
             <?php endif; ?>
         </nav>

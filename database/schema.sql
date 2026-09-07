@@ -66,3 +66,28 @@ CREATE TABLE IF NOT EXISTS presence (
     PRIMARY KEY (user_id, room_id),
     CONSTRAINT fk_presence_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- One row per (room, user): a fresh time-out replaces the previous one.
+-- The user cannot post in that room while expires_at is in the future.
+CREATE TABLE IF NOT EXISTS room_timeouts (
+    room_id       BIGINT UNSIGNED NOT NULL,
+    user_id       BIGINT UNSIGNED NOT NULL,
+    moderator_id  BIGINT UNSIGNED NOT NULL,
+    expires_at    DATETIME NOT NULL,
+    created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (room_id, user_id),
+    CONSTRAINT fk_timeout_room FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
+    CONSTRAINT fk_timeout_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_timeout_moderator FOREIGN KEY (moderator_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- One row per banned user, site-wide. expires_at NULL = permanent ban.
+CREATE TABLE IF NOT EXISTS bans (
+    user_id       BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+    moderator_id  BIGINT UNSIGNED NOT NULL,
+    expires_at    DATETIME NULL,
+    reason        VARCHAR(255) NULL,
+    created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_ban_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_ban_moderator FOREIGN KEY (moderator_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
