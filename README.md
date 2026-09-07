@@ -21,11 +21,20 @@ cp .env.example .env
 mysql -u root -p -e "CREATE DATABASE projet_tchat CHARACTER SET utf8mb4;"
 mysql -u root -p projet_tchat < database/schema.sql
 mysql -u root -p projet_tchat < database/seed.sql
+# si la base existait deja avant l'ajout des roles :
+# mysql -u root -p projet_tchat < database/migrations/001_add_user_roles.sql
 
-php -S localhost:8000 -t public
+PHP_CLI_SERVER_WORKERS=8 php -S localhost:8000 -t public
 ```
 
-Puis ouvrir http://localhost:8000.
+Puis ouvrir http://localhost:8000. Le premier compte inscrit devient
+automatiquement admin (voir Rôles ci-dessous).
+
+`PHP_CLI_SERVER_WORKERS=8` permet au serveur de dev de gérer plusieurs
+requêtes en parallèle ; sans ça, une seule connexion SSE ouverte (temps réel)
+bloque le chargement de toutes les autres pages pendant qu'elle reste
+ouverte. En production derrière PHP-FPM ce réglage n'est pas nécessaire
+(plusieurs workers existent déjà par défaut).
 
 ## Structure
 
@@ -57,6 +66,23 @@ Points corrigés par rapport à l'ancienne version du projet :
 - Anti-flood sur l'envoi de messages et les tentatives de connexion
 - Aucun secret commité : les identifiants de base de données vivent dans
   `.env` (ignoré par git)
+- Contrôle d'accès par rôle vérifié côté serveur sur chaque action sensible
+  (jamais seulement en cachant un bouton côté client)
+
+## Rôles
+
+Trois niveaux, stockés dans `users.role` : `member` (par défaut),
+`moderator`, `admin`. Le tout premier compte créé sur une base vide devient
+automatiquement admin ; tous les suivants sont membres.
+
+- **member** : discuter, envoyer des messages privés, gérer son profil
+- **moderator** : + créer des salons, supprimer n'importe quel message
+- **admin** : + supprimer des salons, changer le rôle des autres utilisateurs
+  (page `/admin_users.php`, protégée contre la suppression du dernier admin)
+
+Pour promouvoir un compte existant créé avant l'ajout des rôles (ou en cas de
+besoin ponctuel), passer par SQL :
+`UPDATE users SET role='admin' WHERE username='...';`
 
 ## Temps réel
 

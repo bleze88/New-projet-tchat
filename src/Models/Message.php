@@ -18,6 +18,12 @@ final class Message
         return (int) Database::connection()->lastInsertId();
     }
 
+    public static function delete(int $id): void
+    {
+        $stmt = Database::connection()->prepare('DELETE FROM messages WHERE id = :id');
+        $stmt->execute(['id' => $id]);
+    }
+
     /**
      * @return list<array<string, mixed>>
      */

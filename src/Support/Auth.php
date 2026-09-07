@@ -45,6 +45,23 @@ final class Auth
         }
     }
 
+    public static function hasRole(string $minimum): bool
+    {
+        $user = self::user();
+
+        return $user !== null && Roles::atLeast($user['role'], $minimum);
+    }
+
+    public static function requireRole(string $minimum): void
+    {
+        self::requireLogin();
+
+        if (!self::hasRole($minimum)) {
+            http_response_code(403);
+            exit('Accès refusé.');
+        }
+    }
+
     public static function login(int $userId): void
     {
         Session::regenerate();

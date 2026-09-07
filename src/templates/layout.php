@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Support\Auth;
+use App\Support\Roles;
 use App\Support\View;
 
 /** @var string $__contentPath */
@@ -27,6 +28,9 @@ $pageTitle = $pageTitle ?? 'Tchat';
             <a href="/rooms.php">Salons</a>
             <a href="/dm.php">Messages privés</a>
             <a href="/profile.php">Profil</a>
+            <?php if (Roles::atLeast($currentUser['role'], Roles::ADMIN)): ?>
+                <a href="/admin_users.php">Utilisateurs</a>
+            <?php endif; ?>
         </nav>
         <div class="app-user">
             <img class="avatar avatar-sm" src="<?= View::e($currentUser['avatar_path'] ?? '/assets/img/default-avatar.svg') ?>" alt="">

@@ -27,4 +27,11 @@ final class Validator
 
         return $trimmed !== '' && mb_strlen($trimmed) <= 1000;
     }
+
+    public static function roomName(string $value): bool
+    {
+        $trimmed = trim($value);
+
+        return $trimmed !== '' && mb_strlen($trimmed) <= 64;
+    }
 }

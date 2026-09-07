@@ -54,18 +54,26 @@ final class User
 
     public static function create(string $username, string $email, string $password): int
     {
+        $pdo = Database::connection();
+
+        // The very first account on a fresh install becomes admin automatically,
+        // so the role system is usable without ever needing a manual DB edit.
+        $isFirstUser = ((int) $pdo->query('SELECT COUNT(*) FROM users')->fetchColumn()) === 0;
+        $role = $isFirstUser ? 'admin' : 'member';
+
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
-        $stmt = Database::connection()->prepare(
-            'INSERT INTO users (username, email, password_hash) VALUES (:username, :email, :password_hash)'
+        $stmt = $pdo->prepare(
+            'INSERT INTO users (username, email, password_hash, role) VALUES (:username, :email, :password_hash, :role)'
         );
         $stmt->execute([
             'username' => $username,
             'email' => $email,
             'password_hash' => $hash,
+            'role' => $role,
         ]);
 
-        return (int) Database::connection()->lastInsertId();
+        return (int) $pdo->lastInsertId();
     }
 
     public static function updateAvatar(int $userId, string $avatarPath): void
@@ -96,5 +104,29 @@ final class User
         $stmt->execute();
 
         return $stmt->fetchAll();
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public static function all(): array
+    {
+        $stmt = Database::connection()->query('SELECT id, username, email, role FROM users ORDER BY username ASC');
+
+        return $stmt->fetchAll();
+    }
+
+    public static function countByRole(string $role): int
+    {
+        $stmt = Database::connection()->prepare('SELECT COUNT(*) FROM users WHERE role = :role');
+        $stmt->execute(['role' => $role]);
+
+        return (int) $stmt->fetchColumn();
+    }
+
+    public static function updateRole(int $userId, string $role): void
+    {
+        $stmt = Database::connection()->prepare('UPDATE users SET role = :role WHERE id = :id');
+        $stmt->execute(['role' => $role, 'id' => $userId]);
     }
 }

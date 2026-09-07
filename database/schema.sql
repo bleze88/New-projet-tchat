@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
     email             VARCHAR(255) NOT NULL,
     password_hash     VARCHAR(255) NOT NULL,
     avatar_path       VARCHAR(255) NULL,
+    role              ENUM('member', 'moderator', 'admin') NOT NULL DEFAULT 'member',
     created_at        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY uniq_username (username),

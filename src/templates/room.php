@@ -14,6 +14,7 @@ use App\Support\View;
 /** @var list<array<string, mixed>> $messages */
 /** @var string|null $error */
 /** @var int $currentUserId */
+/** @var bool $canModerate */
 
 $lastId = 0;
 foreach ($messages as $m) {
@@ -42,7 +43,17 @@ foreach ($messages as $m) {
                 <div class="message-row <?= $mine ? 'mine' : '' ?>" data-message-id="<?= (int) $message['id'] ?>">
                     <img class="avatar avatar-sm" src="<?= View::e($message['avatar_path'] ?: '/assets/img/default-avatar.svg') ?>" alt="">
                     <div>
-                        <div class="message-meta"><?= View::e($message['username']) ?> · <?= View::e(date('d/m H:i', strtotime((string) $message['created_at']))) ?></div>
+                        <div class="message-meta">
+                            <?= View::e($message['username']) ?> · <?= View::e(date('d/m H:i', strtotime((string) $message['created_at']))) ?>
+                            <?php if ($canModerate): ?>
+                                <form method="post" action="/room.php?id=<?= (int) $room['id'] ?>" class="inline-form" onsubmit="return confirm('Supprimer ce message ?');">
+                                    <?= Csrf::field() ?>
+                                    <input type="hidden" name="form" value="delete_message">
+                                    <input type="hidden" name="message_id" value="<?= (int) $message['id'] ?>">
+                                    <button type="submit" class="link-button" style="font-size: 0.72rem;">supprimer</button>
+                                </form>
+                            <?php endif; ?>
+                        </div>
                         <div class="message-bubble"><?= BbCode::render((string) $message['body']) ?></div>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ use App\Models\Room;
 use App\Support\Auth;
 use App\Support\Csrf;
 use App\Support\RateLimiter;
+use App\Support\Roles;
 use App\Support\Validator;
 use App\Support\View;
 
@@ -27,6 +28,14 @@ $error = null;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Csrf::requireValid();
+
+    $formName = (string) ($_POST['form'] ?? 'send_message');
+
+    if ($formName === 'delete_message' && Auth::hasRole(Roles::MODERATOR)) {
+        Message::delete((int) ($_POST['message_id'] ?? 0));
+        header('Location: /room.php?id=' . $roomId);
+        exit;
+    }
 
     $body = (string) ($_POST['body'] ?? '');
 
@@ -54,4 +63,5 @@ View::render('room', [
     'messages' => $messages,
     'error' => $error,
     'currentUserId' => (int) Auth::id(),
+    'canModerate' => Auth::hasRole(Roles::MODERATOR),
 ]);
