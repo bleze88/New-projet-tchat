@@ -74,6 +74,14 @@ final class User
         $stmt->execute(['avatar_path' => $avatarPath, 'id' => $userId]);
     }
 
+    public static function updatePassword(int $userId, string $newPassword): void
+    {
+        $hash = password_hash($newPassword, PASSWORD_DEFAULT);
+
+        $stmt = Database::connection()->prepare('UPDATE users SET password_hash = :password_hash WHERE id = :id');
+        $stmt->execute(['password_hash' => $hash, 'id' => $userId]);
+    }
+
     /**
      * @return list<array<string, mixed>>
      */

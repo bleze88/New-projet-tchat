@@ -367,6 +367,46 @@ a {
     margin-bottom: 1.5rem;
 }
 
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+    gap: 0.5rem;
+}
+
+.avatar-choice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: var(--surface-alt);
+    cursor: pointer;
+}
+
+.avatar-choice:hover {
+    border-color: var(--accent);
+}
+
+.avatar-choice.selected {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 15%, var(--surface-alt));
+}
+
+.avatar-choice input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.avatar-choice img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--surface);
+}
+
 .sidebar-toggle {
     display: none;
 }
