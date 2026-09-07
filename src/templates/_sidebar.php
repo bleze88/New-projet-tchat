@@ -12,10 +12,10 @@ use App\Support\View;
 <aside class="sidebar">
     <h2>Salons</h2>
     <ul class="sidebar-list">
-        <?php foreach ($rooms as $room): ?>
+        <?php foreach ($rooms as $sidebarRoom): ?>
             <li>
-                <a href="/room.php?id=<?= (int) $room['id'] ?>" class="<?= $activeRoomId === (int) $room['id'] ? 'active' : '' ?>">
-                    # <?= View::e($room['name']) ?>
+                <a href="/room.php?id=<?= (int) $sidebarRoom['id'] ?>" class="<?= $activeRoomId === (int) $sidebarRoom['id'] ? 'active' : '' ?>">
+                    # <?= View::e($sidebarRoom['name']) ?>
                 </a>
             </li>
         <?php endforeach; ?>
@@ -26,11 +26,11 @@ use App\Support\View;
         <?php if (empty($conversations)): ?>
             <li style="padding: 0.5rem; color: var(--fg-muted); font-size: 0.85rem;">Aucune conversation</li>
         <?php endif; ?>
-        <?php foreach ($conversations as $conv): ?>
+        <?php foreach ($conversations as $sidebarConv): ?>
             <li>
-                <a href="/dm.php?with=<?= (int) $conv['user_id'] ?>" class="<?= $activeDmUserId === (int) $conv['user_id'] ? 'active' : '' ?>">
-                    <img class="avatar avatar-sm" src="<?= View::e($conv['avatar_path'] ?: '/assets/img/default-avatar.svg') ?>" alt="">
-                    <?= View::e($conv['username']) ?>
+                <a href="/dm.php?with=<?= (int) $sidebarConv['user_id'] ?>" class="<?= $activeDmUserId === (int) $sidebarConv['user_id'] ? 'active' : '' ?>">
+                    <img class="avatar avatar-sm" src="<?= View::e($sidebarConv['avatar_path'] ?: '/assets/img/default-avatar.svg') ?>" alt="">
+                    <?= View::e($sidebarConv['username']) ?>
                 </a>
             </li>
         <?php endforeach; ?>
