@@ -30,7 +30,7 @@ final class Message
     public static function recent(int $roomId, int $limit = 50): array
     {
         $stmt = Database::connection()->prepare(
-            'SELECT m.*, u.username, u.avatar_path
+            'SELECT m.*, u.username, u.avatar_path, u.role
              FROM messages m
              JOIN users u ON u.id = m.user_id
              WHERE m.room_id = :room_id
@@ -50,7 +50,7 @@ final class Message
     public static function since(int $roomId, int $lastId): array
     {
         $stmt = Database::connection()->prepare(
-            'SELECT m.*, u.username, u.avatar_path
+            'SELECT m.*, u.username, u.avatar_path, u.role
              FROM messages m
              JOIN users u ON u.id = m.user_id
              WHERE m.room_id = :room_id AND m.id > :last_id

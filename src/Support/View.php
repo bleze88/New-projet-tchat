@@ -11,6 +11,19 @@ final class View
         return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');
     }
 
+    public static function roleBadge(?string $role): string
+    {
+        if ($role === Roles::ADMIN) {
+            return '<span class="role-badge role-badge-admin">admin</span>';
+        }
+
+        if ($role === Roles::MODERATOR) {
+            return '<span class="role-badge role-badge-moderator">mod</span>';
+        }
+
+        return '';
+    }
+
     /**
      * @param array<string, mixed> $data
      */

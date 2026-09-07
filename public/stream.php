@@ -69,6 +69,7 @@ while (microtime(true) - $start < MAX_DURATION) {
                 'user_id' => (int) $message['user_id'],
                 'username' => $message['username'],
                 'avatar_path' => $message['avatar_path'],
+                'role' => $message['role'],
                 'body' => \App\Support\BbCode::render((string) $message['body']),
                 'created_at' => $message['created_at'],
             ], $lastMessageId);

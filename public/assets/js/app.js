@@ -24,6 +24,16 @@
         return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
     }
 
+    function roleBadgeHtml(role) {
+        if (role === 'admin') {
+            return '<span class="role-badge role-badge-admin">admin</span>';
+        }
+        if (role === 'moderator') {
+            return '<span class="role-badge role-badge-moderator">mod</span>';
+        }
+        return '';
+    }
+
     function appendMessage(container, opts) {
         var row = document.createElement('div');
         row.className = 'message-row' + (opts.mine ? ' mine' : '');
@@ -32,7 +42,7 @@
         row.innerHTML =
             '<img class="avatar avatar-sm" src="' + escapeAttr(opts.avatar || '/assets/img/default-avatar.svg') + '" alt="">' +
             '<div>' +
-            '<div class="message-meta">' + escapeAttr(opts.username) + ' · ' + escapeAttr(formatTime(opts.createdAt)) + '</div>' +
+            '<div class="message-meta">' + escapeAttr(opts.username) + roleBadgeHtml(opts.role) + ' · ' + escapeAttr(formatTime(opts.createdAt)) + '</div>' +
             '<div class="message-bubble">' + opts.bodyHtml + '</div>' +
             '</div>';
 
@@ -118,6 +128,7 @@
                     mine: data.user_id === currentUserId,
                     username: data.username,
                     avatar: data.avatar_path,
+                    role: data.role,
                     bodyHtml: data.body,
                     createdAt: data.created_at,
                 });

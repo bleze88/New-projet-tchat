@@ -44,7 +44,7 @@ foreach ($messages as $m) {
                     <img class="avatar avatar-sm" src="<?= View::e($message['avatar_path'] ?: '/assets/img/default-avatar.svg') ?>" alt="">
                     <div>
                         <div class="message-meta">
-                            <?= View::e($message['username']) ?> · <?= View::e(date('d/m H:i', strtotime((string) $message['created_at']))) ?>
+                            <?= View::e($message['username']) ?><?= View::roleBadge($message['role'] ?? null) ?> · <?= View::e(date('d/m H:i', strtotime((string) $message['created_at']))) ?>
                             <?php if ($canModerate): ?>
                                 <form method="post" action="/room.php?id=<?= (int) $room['id'] ?>" class="inline-form" onsubmit="return confirm('Supprimer ce message ?');">
                                     <?= Csrf::field() ?>
